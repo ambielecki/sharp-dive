@@ -1,0 +1,6 @@
+@DiveCalculator_HostAddress = http://localhost:5069
+
+GET {{DiveCalculator_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
