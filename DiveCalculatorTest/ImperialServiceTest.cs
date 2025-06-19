@@ -2,8 +2,10 @@
 
 namespace DiveCalculatorTest;
 
-public class ImperialServiceTest
+public class ImperialServiceTest()
 {
+    private readonly ImperialDiveCalculator _diveCalculator = new ImperialDiveCalculator();
+    
     [Theory]
     [InlineData(60, 30, "L")]
     [InlineData(140, 30, null)] // depth exists, over NDL
@@ -12,10 +14,16 @@ public class ImperialServiceTest
     [InlineData(150, 1, null)] // out of rec diving limit
     [InlineData(90, 25, "Q")] // NDL
     public void GetPressureGroupTest(int depth, int minutes, string? expected) {
-        var diveCalculator = new ImperialDiveCalculator();
-        
-        var pressureGroup = diveCalculator.GetPressureGroup(depth, minutes).PressureGroup;
+        var pressureGroup = _diveCalculator.GetPressureGroup(depth, minutes).PressureGroup;
         Assert.Equal(expected, pressureGroup);
+    }
+
+    [Fact]
+    public void GetPressureGroupExceedsNdlTest() {
+        var response = _diveCalculator.GetPressureGroup(140, 55);
+        Assert.Null(response.PressureGroup);
+        Assert.Single(response.Warnings);
+        Assert.Equal(_diveCalculator.ExceedsNdl, response.Warnings[0]);
     }
 
     [Theory]
@@ -25,9 +33,15 @@ public class ImperialServiceTest
     [InlineData(140, 8)]
     [InlineData(141, null)]
     public void GetMaxBottomTimeTest(int depth, int? expected) {
-        var diveCalculator = new ImperialDiveCalculator();
-        
-        var maxTime = diveCalculator.GetMaxBottomTime(depth).MaxBottomTime;
+        var maxTime = _diveCalculator.GetMaxBottomTime(depth).MaxBottomTime;
         Assert.Equal(expected, maxTime);
+    }
+    
+    [Fact]
+    public void GetPressureGroupExceedsRecLimitsTest() {
+        var response = _diveCalculator.GetPressureGroup(150, 55);
+        Assert.Null(response.PressureGroup);
+        Assert.Single(response.Warnings);
+        Assert.Equal(_diveCalculator.ExceedsRecreationalDepth, response.Warnings[0]);
     }
 }

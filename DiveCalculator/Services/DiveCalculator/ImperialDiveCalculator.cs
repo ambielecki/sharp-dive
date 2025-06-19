@@ -5,9 +5,9 @@ namespace DiveCalculator.Services.DiveCalculator;
 public class ImperialDiveCalculator : IDiveCalculator
 {
     private const int Ndl = 140;
-    private const string ExceedsNdl = "Dive Time Exceeds NDL";
-    private const string ExceedsRecreationalDepth = "Depth Exceeds Recreational Limits";
-    
+    public string ExceedsNdl { get; } = "Dive Time Exceeds NDL";
+    public string ExceedsRecreationalDepth { get; } = "Depth Exceeds Recreational Limits";
+
     private List<string> _warnings = [];
     
     private readonly List<string> _tableGroups = [
