@@ -17,4 +17,13 @@ public class DiveCalculatorController(ILogger<DiveCalculatorController> logger, 
         
         return Ok(diveCalculator.GetPressureGroup(depth.Value, minutes.Value));
     }
+
+    [HttpGet("max-bottom-time", Name = "GetMaxBottomTime")]
+    public IActionResult GetMaxBottomTime(int? depth) {
+        if (depth == null) {
+            return BadRequest();
+        }
+
+        return Ok(diveCalculator.GetMaxBottomTime(depth.Value));
+    }
 }

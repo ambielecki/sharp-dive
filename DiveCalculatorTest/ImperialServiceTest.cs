@@ -14,7 +14,20 @@ public class ImperialServiceTest
     public void GetPressureGroupTest(int depth, int minutes, string? expected) {
         var diveCalculator = new ImperialDiveCalculator();
         
-        var pressureGroup = diveCalculator.GetPressureGroup(depth, minutes);
+        var pressureGroup = diveCalculator.GetPressureGroup(depth, minutes).PressureGroup;
         Assert.Equal(expected, pressureGroup);
+    }
+
+    [Theory]
+    [InlineData(34, 205)]
+    [InlineData(35, 205)]
+    [InlineData(110, 16)]
+    [InlineData(140, 8)]
+    [InlineData(141, null)]
+    public void GetMaxBottomTimeTest(int depth, int? expected) {
+        var diveCalculator = new ImperialDiveCalculator();
+        
+        var maxTime = diveCalculator.GetMaxBottomTime(depth).MaxBottomTime;
+        Assert.Equal(expected, maxTime);
     }
 }

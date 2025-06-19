@@ -1,7 +1,15 @@
+using DiveCalculator.ResponseTypes.DiveCalculator;
+
 namespace DiveCalculator.Services.DiveCalculator;
 
 public class ImperialDiveCalculator : IDiveCalculator
 {
+    private const int Ndl = 140;
+    private const string ExceedsNdl = "Dive Time Exceeds NDL";
+    private const string ExceedsRecreationalDepth = "Depth Exceeds Recreational Limits";
+    
+    private List<string> _warnings = [];
+    
     private readonly List<string> _tableGroups = [
         "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V",
         "W", "X", "Y", "Z"
@@ -37,10 +45,44 @@ public class ImperialDiveCalculator : IDiveCalculator
         { "Z", [205, 140] }
     };
     
-    public string? GetPressureGroup(int depth, int minutes) {
+    public PressureGroupResponse GetPressureGroup(int depth, int minutes) {
+        if (depth > Ndl) {
+            _warnings.Add(ExceedsRecreationalDepth);
+            
+            return new PressureGroupResponse(null, _warnings);
+        }
+
         var tableDepthKey = GetTableDepthKey(depth);
         
-        return GetPressureGroupFromTableOne(tableDepthKey, minutes);;
+        var pressureGroup =  GetPressureGroupFromTableOne(tableDepthKey, minutes);
+        if (pressureGroup == null) {
+            _warnings.Add(ExceedsNdl);
+        }
+        
+        return new PressureGroupResponse(pressureGroup, _warnings);
+    }
+    
+    public MaxBottomTimeResponse GetMaxBottomTime(int depth) {
+        if (depth > Ndl) {
+            _warnings.Add(ExceedsRecreationalDepth);
+            
+            return new MaxBottomTimeResponse(null, _warnings);
+        }
+        
+        int? tableDepthKey = GetTableDepthKey(depth);
+        int? bottomTime = null;
+
+        foreach (KeyValuePair<string, List<int?>> row in _tableOne.Reverse()) {
+            if (row.Value.Count > tableDepthKey.Value) {
+                if (row.Value[tableDepthKey.Value] != null) {
+                    bottomTime = row.Value[tableDepthKey.Value];
+                }
+                
+                break;           
+            }
+        }
+        
+        return new MaxBottomTimeResponse(bottomTime, _warnings);
     }
 
     private int? GetTableDepthKey(int depth) {

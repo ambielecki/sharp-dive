@@ -1,6 +1,9 @@
+using DiveCalculator.ResponseTypes.DiveCalculator;
+
 namespace DiveCalculator.Services.DiveCalculator;
 
 public interface IDiveCalculator
 {
-    public string? GetPressureGroup(int depth, int minutes);
+    public PressureGroupResponse GetPressureGroup(int depth, int minutes);
+    public MaxBottomTimeResponse GetMaxBottomTime(int depth);
 }
