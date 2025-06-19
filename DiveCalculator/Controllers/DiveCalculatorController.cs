@@ -1,28 +1,20 @@
+using DiveCalculator.Services.DiveCalculator;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DiveCalculator.Controllers;
 
 [ApiController]
 [Route("[controller]")]
-public class WeatherForecastController : ControllerBase
+public class DiveCalculatorController(ILogger<DiveCalculatorController> logger, IDiveCalculator diveCalculator) : ControllerBase
 {
-    private static readonly string[] Summaries = new[] {
-        "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
-    };
+    private readonly ILogger<DiveCalculatorController> _logger = logger;
 
-    private readonly ILogger<WeatherForecastController> _logger;
-
-    public WeatherForecastController(ILogger<WeatherForecastController> logger) {
-        _logger = logger;
-    }
-
-    [HttpGet(Name = "GetWeatherForecast")]
-    public IEnumerable<WeatherForecast> Get() {
-        return Enumerable.Range(1, 5).Select(index => new WeatherForecast {
-                Date = DateOnly.FromDateTime(DateTime.Now.AddDays(index)),
-                TemperatureC = Random.Shared.Next(-20, 55),
-                Summary = Summaries[Random.Shared.Next(Summaries.Length)]
-            })
-            .ToArray();
+    [HttpGet("pressure-group", Name = "GetPressureGroup")]
+    public IActionResult GetPressureGroup(int? depth, int? minutes) {
+        if (depth == null || minutes == null) {
+            return BadRequest();
+        }
+        
+        return Ok(diveCalculator.GetPressureGroup(depth.Value, minutes.Value));
     }
 }

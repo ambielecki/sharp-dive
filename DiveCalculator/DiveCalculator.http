@@ -3,4 +3,7 @@
 GET {{DiveCalculator_HostAddress}}/weatherforecast/
 Accept: application/json
 
+GET {{DiveCalculator_HostAddress}}/divecalculator/
+Accept: application/json
+
 ###
