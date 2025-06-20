@@ -72,13 +72,16 @@ public class ImperialDiveCalculator : IDiveCalculator
         int? tableDepthKey = GetTableDepthKey(depth);
         int? bottomTime = null;
 
-        foreach (KeyValuePair<string, List<int?>> row in _tableOne.Reverse()) {
-            if (row.Value.Count > tableDepthKey.Value) {
-                if (row.Value[tableDepthKey.Value] != null) {
-                    bottomTime = row.Value[tableDepthKey.Value];
-                }
+        if (tableDepthKey != null)
+        {
+            foreach (KeyValuePair<string, List<int?>> row in _tableOne.Reverse()) {
+                if (row.Value.Count > tableDepthKey.Value) {
+                    if (row.Value[tableDepthKey.Value] != null) {
+                        bottomTime = row.Value[tableDepthKey.Value];
+                    }
                 
-                break;           
+                    break;           
+                }
             }
         }
         

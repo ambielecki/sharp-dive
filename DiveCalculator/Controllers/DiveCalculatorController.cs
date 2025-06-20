@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace DiveCalculator.Controllers;
 
 [ApiController]
-[Route("[controller]")]
+[Route("api/[controller]")]
 public class DiveCalculatorController(ILogger<DiveCalculatorController> logger, IDiveCalculator diveCalculator) : ControllerBase
 {
     private readonly ILogger<DiveCalculatorController> _logger = logger;

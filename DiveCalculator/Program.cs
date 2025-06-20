@@ -1,9 +1,18 @@
+using DiveCalculator.Data;
 using DiveCalculator.Services.DiveCalculator;
+using Microsoft.EntityFrameworkCore;
+
 var builder = WebApplication.CreateBuilder(args);
+var serverVersion = new MariaDbServerVersion(new Version("10.6.16"));
+var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 
 // Add services to the container.
 
 builder.Services.AddControllers();
+builder.Services.AddDbContext<DataContext>(opt =>
+{
+    opt.UseMySql(connectionString, serverVersion);
+});
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
 
