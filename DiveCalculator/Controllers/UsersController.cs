@@ -1,5 +1,6 @@
 ﻿using DiveCalculator.Data;
 using DiveCalculator.Entities;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -23,6 +24,7 @@ public class UsersController(DataContext context) : ControllerBase
         return Ok(users);
     }
     
+    [Authorize]
     [HttpGet("{id:guid}")]
     public async Task<ActionResult<User>> GetUser(Guid id)
     {

@@ -1,7 +1,10 @@
+using System.Text;
 using DiveCalculator.Data;
 using DiveCalculator.Services.DiveCalculator;
 using DiveCalculator.Services.Token;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 
 var builder = WebApplication.CreateBuilder(args);
 var serverVersion = new MariaDbServerVersion(new Version("10.6.16"));
@@ -19,6 +22,17 @@ builder.Services.AddOpenApi();
 
 builder.Services.AddScoped<IDiveCalculator, ImperialDiveCalculator>();
 builder.Services.AddScoped<ITokenService, TokenService>();
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddJwtBearer(options =>
+    {
+        var tokenKey = builder.Configuration["TokenKey"] ?? throw new Exception("TokenKey not found in config");
+        options.TokenValidationParameters = new TokenValidationParameters{
+            ValidateIssuerSigningKey = true,
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(tokenKey)),
+            ValidateIssuer = false,
+            ValidateAudience = false,
+        };
+    });
 
 var app = builder.Build();
 
@@ -29,6 +43,12 @@ if (app.Environment.IsDevelopment()) {
 
 app.UseHttpsRedirection();
 
+app.UseCors(x => x.AllowAnyHeader()
+    .AllowAnyMethod()
+    .WithOrigins("http://localhost:4200", "https://localhost:4200")
+);
+
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
