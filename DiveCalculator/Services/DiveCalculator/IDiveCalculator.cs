@@ -1,4 +1,4 @@
-using DiveCalculator.ResponseTypes.DiveCalculator;
+using DiveCalculator.DTO.DiveCalculator;
 
 namespace DiveCalculator.Services.DiveCalculator;
 

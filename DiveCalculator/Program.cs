@@ -1,5 +1,6 @@
 using DiveCalculator.Data;
 using DiveCalculator.Services.DiveCalculator;
+using DiveCalculator.Services.Token;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -17,6 +18,7 @@ builder.Services.AddDbContext<DataContext>(opt =>
 builder.Services.AddOpenApi();
 
 builder.Services.AddScoped<IDiveCalculator, ImperialDiveCalculator>();
+builder.Services.AddScoped<ITokenService, TokenService>();
 
 var app = builder.Build();
 

@@ -5,6 +5,7 @@
       "Microsoft.AspNetCore": "Warning"
     }
   },
+  "TokenKey": "some64charkey"
   "ConnectionStrings": {
     "DefaultConnection": "Server=localhost;Port=33061;Database=db;User=user;Password=pwd"
   }

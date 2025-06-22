@@ -15,10 +15,12 @@
         </PackageReference>
         <PackageReference Include="Pomelo.EntityFrameworkCore.MySql" Version="9.0.0-preview.3.efcore.9.0.0" />
         <PackageReference Include="Pomelo.EntityFrameworkCore.MySql.Design" Version="1.1.2" />
+        <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="8.12.1" />
     </ItemGroup>
 
     <ItemGroup>
       <Folder Include="Data\Seeds\" />
+      <Folder Include="DTO\Users\" />
       <Folder Include="Types\" />
     </ItemGroup>
 

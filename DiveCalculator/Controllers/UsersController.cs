@@ -12,7 +12,13 @@ public class UsersController(DataContext context) : ControllerBase
     [HttpGet]
     public async Task <ActionResult<IEnumerable<User>>> GetUsers()
     {
-        var users = await context.Users.ToListAsync();
+        var users = await context.
+            Users
+            .Select(user => new {
+                user.Guid,
+                user.Username,
+            })
+            .ToListAsync();
         
         return Ok(users);
     }
@@ -21,6 +27,10 @@ public class UsersController(DataContext context) : ControllerBase
     public async Task<ActionResult<User>> GetUser(Guid id)
     {
         var user = await context.Users
+            .Select(user => new {
+                user.Guid,
+                user.Username,
+            })
             .FirstOrDefaultAsync(user => user.Guid == id);
 
         if (user == null)

@@ -1,4 +1,4 @@
-namespace DiveCalculator.ResponseTypes.DiveCalculator;
+namespace DiveCalculator.DTO.DiveCalculator;
 
 public class MaxBottomTimeResponse(int? maxBottomTime, List<string> warnings)
 {
