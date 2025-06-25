@@ -20,6 +20,7 @@
     </ItemGroup>
 
     <ItemGroup>
+      <Folder Include="Data\Migrations\" />
       <Folder Include="Data\Seeds\" />
       <Folder Include="DTO\Users\" />
       <Folder Include="Types\" />
